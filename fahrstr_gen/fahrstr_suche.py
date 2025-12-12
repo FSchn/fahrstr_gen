@@ -35,7 +35,7 @@ def get_bedingte_register_kombinationen(einzelfahrstr_liste):
     return result
 
 class FahrstrassenSuche:
-    def __init__(self, fahrstr_typ, alternative_fahrwege, bedingungen, vorsignal_graph, flankenschutz_graph, loeschfahrstr_namen, loeschedeckungssignalnamen, loeschfahrstr_keine_meldung):
+    def __init__(self, fahrstr_typ, alternative_fahrwege, bedingungen, vorsignal_graph, flankenschutz_graph, loeschfahrstr_namen, keine_deckungssignal_namen_in_fstr_name, loeschfahrstr_keine_meldung):
         self.einzelfahrstrassen = dict()  # KnotenUndRichtung -> [EinzelFahrstrasse]
         self.fahrstr_typ = fahrstr_typ
         self.alternative_fahrwege = alternative_fahrwege
@@ -44,7 +44,7 @@ class FahrstrassenSuche:
         self.flankenschutz_graph = flankenschutz_graph
         self.loeschfahrstr_namen = loeschfahrstr_namen
         self.loeschfahrstr_keine_meldung = loeschfahrstr_keine_meldung
-        self.loeschedeckungssignalnamen = loeschedeckungssignalnamen
+        self.keine_deckungssignal_namen_in_fstr_name = keine_deckungssignal_namen_in_fstr_name
         self.fahrstr_nummerierung = Counter()  # (Start-Refpunkt, Ziel-Refpunkt) -> Anzahl gefundener Fahrstrassen, zwecks Nummerierung
 
     # Gibt alle vom angegebenen Knoten ausgehenden (kombinierten) Fahrstrassen in der angegebenen Richtung zurueck.
@@ -234,7 +234,7 @@ class FahrstrassenSuche:
 
             zielkante = einzelfahrstrasse.kanten.eintrag
 
-            if not self.loeschedeckungssignalnamen or (zielkante.ziel.signal().sigtyp != 11) or (idx + 1 == len(einzelfahrstrassen)): #Bei Zugdeckungssignalen den Namen der ZDs weglassen können
+            if not self.keine_deckungssignal_namen_in_fstr_name or (zielkante.ziel.signal().sigtyp != 11) or (idx + 1 == len(einzelfahrstrassen)): #Bei Zugdeckungssignalen den Namen der ZDs weglassen können
                 result.name += " -> {}".format(zielkante.ziel.signal().signalbeschreibung())
 
             if len(bedingte_register[idx]):
