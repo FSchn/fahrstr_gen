@@ -148,6 +148,10 @@ class TestFahrstrGen(unittest.TestCase):
     def test_regelgleisanzeiger(self):
         (retcode, stderr) = self.run_fahrstr_gen("Regelgleisanzeiger.st3")
         self.assertEqual(retcode, 0)
+        
+    def test_regelgleishilfsanzeiger(self):
+        (retcode, stderr) = self.run_fahrstr_gen("Regelgleishilfsanzeiger.st3")
+        self.assertEqual(retcode, 0)
 
 
 if __name__ == '__main__':
