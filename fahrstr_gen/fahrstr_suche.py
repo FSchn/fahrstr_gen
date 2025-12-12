@@ -315,7 +315,7 @@ class FahrstrassenSuche:
                     if zeile.hsig_geschw == -999.0:
                         logging.debug("{}: Zielsignal {} wird in der Fahrstrasse verknuepft (Zeile fuer Geschwindigkeit -999)".format(result.name, result.ziel.signal()))
                         result.signale.append(FahrstrHauptsignal(result.ziel, zeilenidx, False))
-                        if result.ziel.element_richtung.element.modul != modulverwaltung.dieses_modul:
+                        if result.ziel.element_richtung.element.modul != modulverwaltung.dieses_modul and not result.ziel.element_richtung.element.modul.fahrstr_gen_only:
                             logging.debug("{}: {} (Ref. {}) wurde bisher vom Zusi-3D-Editor nicht als Zielsignal angesteuert, da es in einem anderen Modul liegt".format(result.name, result.ziel.signal(), result.ziel.refnr))
                         break
 
@@ -396,7 +396,7 @@ class FahrstrassenSuche:
                             return None
                         else:
                             kennlichtsignal_zeile = einzelfahrstrasse.start.signal().get_richtungsanzeiger_zeile(zeilenidx, result.rgl_ggl, result.richtungsanzeiger)
-                            if zeilenidx != kennlichtsignal_zeile:
+                            if zeilenidx != kennlichtsignal_zeile and not einzelfahrstrasse.start.element_und_richtung().element.modul.fahrstr_gen_only:
                                 logging.info("{}: Kennlichtsignal ({}, Ref. {}) wuerde vom Zusi-3D-Editor nicht mit Richtungs-/Gegengleisanzeiger angesteuert.".format(result.name, refpunkt.signal(), refpunkt.refnr))
                             result.signale.append(FahrstrHauptsignal(refpunkt, kennlichtsignal_zeile, False))
                         gefunden = True
@@ -406,10 +406,10 @@ class FahrstrassenSuche:
                     logging.error("{}: Kennlichtsignal ({}) hat keine Zeile fuer Kennlicht (Typ {}, Geschwindigkeit -2). Die Fahrstrasse wird nicht eingerichtet.".format(result.name, einzelfahrstrasse.start.signal(), str_fahrstr_typ(self.fahrstr_typ)))
                     return None
 
-                if self._rangiersignal_in_zugfahrstr_warnung(einzelfahrstrasse.start.signal()):
+                if self._rangiersignal_in_zugfahrstr_warnung(einzelfahrstrasse.start.signal()) and not einzelfahrstrasse.start.element_und_richtung().element.modul.fahrstr_gen_only:
                     logging.warn("{}: Kennlichtsignal ({}, Ref. {}) wuerde vom Zusi-3D-Editor auf einen Rangierfahrt-Fahrtbegriff gestellt, da \"Rangiersignal in Zugfahrstrasse umstellen\" aktiviert ist.".format(result.name, result.ziel.signal(), result.ziel.refnr))
 
-            if self._rangiersignal_in_zugfahrstr_warnung(result.ziel.signal()):
+            if self._rangiersignal_in_zugfahrstr_warnung(result.ziel.signal()) and not einzelfahrstrasse.start.element_und_richtung().element.modul.fahrstr_gen_only:
                 logging.warn("{}: Zielsignal ({}, Ref. {}) wuerde vom Zusi-3D-Editor auf einen Fahrtbegriff gestellt, da \"Rangiersignal in Zugfahrstrasse umstellen\" aktiviert ist.".format(result.name, result.ziel.signal(), result.ziel.refnr))
 
         signale_reversed = result.signale
@@ -490,7 +490,7 @@ class FahrstrassenSuche:
                                     except ValueError:
                                         # Das ist ziemlich normal, etwa bei 500-Hz-Magneten.
                                         logging.debug("{}: An {} (Ref. {}) wurde keine Vorsignalspalte fuer Geschwindigkeit -2 (Dunkelschaltung) gefunden. Suche Vorsignalspalte gemaess Signalgeschwindigkeit {}".format(result.name, vsig.signal(), vsig.refnr, geschw_naechstes_hsig))
-                                        if vsig.signal().get_vsig_spalte(geschw_naechstes_hsig) != vsig.signal().get_vsig_spalte(-1):
+                                        if vsig.signal().get_vsig_spalte(geschw_naechstes_hsig) != vsig.signal().get_vsig_spalte(-1) and not vsig.element_richtung.element.modul.fahrstr_gen_only:
                                             logging.warn("{}: An {} (Ref. {}) wurde keine Vorsignalspalte fuer Geschwindigkeit -2 (Dunkelschaltung) gefunden. Im Zusi-3D-Editor wuerde die Spalte mit der hoechsten Signalgeschwindigkeit angesteuert.".format(result.name, vsig.signal(), vsig.refnr))
 
                                 if spalte is None:

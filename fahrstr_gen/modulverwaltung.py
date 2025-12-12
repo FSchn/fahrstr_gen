@@ -249,6 +249,12 @@ class Modul:
 
         self.referenzpunkte_by_nr = dict((r.refnr, r) for rs in self.referenzpunkte.values() for r in rs)  # Nr -> RefPunkt
         self.geaendert = False
+        self.fahrstr_gen_only = False
+        for r in self.root.findall("./Info/Datei"):
+            if r.get("Dateiname", "").lower().endswith(".fahrstr_gen.xml"):
+                self.fahrstr_gen_only = True
+        if self.fahrstr_gen_only:
+            logging.debug("Datei {} als fahrstr_gen_only identifiziert".format(self.relpath))
 
     def name_kurz(self):
         return os.path.basename(self.relpath.replace('\\', os.sep))
