@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-import sys
-sys.path.insert(0, "C:\\Users\\es\\Documents\\Visual Studio 2019\\Projects\\fahrstr_gen")
+
 from fahrstr_gen import modulverwaltung
 from fahrstr_gen.konstanten import *
 from fahrstr_gen.strecke import ist_fahrstr_start_sig
@@ -18,12 +17,11 @@ import sys
 from collections import defaultdict, namedtuple
 
 import logging
-#import tkinter
-#import tkinter.filedialog
-#import tkinter.messagebox
-#import tkinter.ttk
+import tkinter
+import tkinter.filedialog
+import tkinter.messagebox
+import tkinter.ttk
 
-logging.basicConfig(stream = sys.stdout, level = logging.INFO)
 logging.COMPAT = 15
 logging.addLevelName(logging.COMPAT, 'COMPAT')
 
@@ -360,7 +358,7 @@ def finde_fahrstrassen(args):
         return 1
 
 # http://stackoverflow.com/a/35365616/1083696
-class LoggingHandlerFrame: #(tkinter.ttk.Frame):
+class LoggingHandlerFrame: (tkinter.ttk.Frame):
 
     class Handler(logging.Handler):
         def __init__(self, widget):
